@@ -5,42 +5,40 @@ import altair as alt
 import pydeck as pdk
 
 st.set_page_config(layout="wide")
+st.title("🌍 Geospatial Dashboard (Arba Minch Area)")
 
-st.title("🌍 Geospatial Dashboard (Cloud Safe)")
+# Center map around Arba Minch (approx. lat 6.04, lon 37.56)
+lat_center, lon_center = 6.04, 37.56
+zoom_level = 10  # higher zoom for smaller area
 
-# Sidebar
-region = st.sidebar.selectbox(
-    "Select Region",
-    ["Ethiopia", "Horn of Africa", "East Africa"]
-)
-
-regions = {
-    "Ethiopia": (9.145, 40.4897, 6),
-    "Horn of Africa": (8.0, 43.0, 5),
-    "East Africa": (1.0, 37.0, 5),
-}
-
-lat, lon, zoom = regions[region]
+# Optional: define a small rectangle boundary around Arba Minch
+lat_range = (5.90, 6.18)
+lon_range = (37.40, 37.72)
 
 # Map
-df = pd.DataFrame({"lat": [lat], "lon": [lon]})
+# Random sample points within this rectangle for demonstration
+np.random.seed(42)
+n_points = 50
+lats = np.random.uniform(lat_range[0], lat_range[1], n_points)
+lons = np.random.uniform(lon_range[0], lon_range[1], n_points)
+df = pd.DataFrame({"lat": lats, "lon": lons})
 
 layer = pdk.Layer(
     "ScatterplotLayer",
     df,
     get_position="[lon, lat]",
-    get_radius=60000,
+    get_radius=2000,  # smaller radius since area is small
     get_fill_color=[0, 180, 0],
+    pickable=True
 )
 
-view = pdk.ViewState(latitude=lat, longitude=lon, zoom=zoom)
+view = pdk.ViewState(latitude=lat_center, longitude=lon_center, zoom=zoom_level)
 
-st.subheader("🗺️ Map")
+st.subheader("🗺️ Map Around Arba Minch")
 st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view))
 
-# NDVI Stats
+# NDVI Stats (random demo data)
 ndvi = np.random.rand(100, 100)
-
 c1, c2, c3 = st.columns(3)
 c1.metric("Mean NDVI", f"{ndvi.mean():.2f}")
 c2.metric("Max NDVI", f"{ndvi.max():.2f}")
