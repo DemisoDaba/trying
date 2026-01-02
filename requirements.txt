@@ -1,8 +1,40 @@
+# Core web framework
 streamlit>=1.24.0
+
+# Geospatial libraries
 leafmap>=0.24.0
 folium>=0.16.0
+geopandas>=0.14.0
+pyproj>=3.6.0
+shapely>=2.0.0
+
+# Raster processing
+rasterio>=1.3.8
+xarray>=2023.10.0
+rioxarray>=0.15.0
+imageio>=2.31.0
+Pillow>=10.0.0
+
+# Numerical computing
 numpy>=1.26.0
-matplotlib>=3.8.0
 pandas>=2.1.0
+
+# Visualization
+matplotlib>=3.8.0
 branca>=0.6.1
+plotly>=5.17.0
+
+# Utilities
 jinja2>=3.1.2
+requests>=2.31.0
+pyyaml>=6.0
+click>=8.1.0
+tqdm>=4.66.0
+ipyleaflet>=0.18.0
+
+# Additional geospatial dependencies
+fiona>=1.9.0
+geopy>=2.4.0
+contextily>=1.4.0
+cartopy>=0.21.0
+owslib>=0.29.0
