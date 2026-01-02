@@ -1,7 +1,6 @@
 import streamlit as st
 import leafmap.foliumap as leafmap
 from datetime import date
-import rasterio
 import os
 
 # ===============================
@@ -109,13 +108,11 @@ with center_col:
             raster_path = default_file
 
     if apply_filter and raster_path is not None:
-        # Add raster directly using add_rasterio()
+        # Add raster directly from file using leafmap
         m.add_rasterio(raster_path, layer_name="SBC Raster")
 
-        # Zoom to raster using bounds
-        with rasterio.open(raster_path) as src:
-            bounds = src.bounds
-        m.set_center((bounds.left + bounds.right)/2, (bounds.bottom + bounds.top)/2, 10)
+        # Leafmap will auto-zoom to the raster
+        m.zoom_to_layer("SBC Raster")
 
     elif apply_filter and raster_path is None:
         st.warning("No raster file found. Please upload a SBC TIFF file.")
