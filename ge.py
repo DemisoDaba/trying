@@ -100,7 +100,7 @@ apply_filter = st.sidebar.button("Apply Filter")
 # ===============================
 # MAIN LAYOUT
 # ===============================
-center_col, right_col = st.columns([4,1], gap="large")
+center_col, right_col = st.columns([4,1], gap="small")
 
 # CENTER: Map / Satellite imagery
 with center_col:
