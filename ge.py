@@ -21,27 +21,27 @@ st.markdown("""
     background-color: #0a2342;  /* Dark blue */
     color: white;
     padding: 25px;
-    border-radius: 10px;
     text-align: center;
     font-family: 'Arial', sans-serif;
     margin-bottom: 0px;  /* No space below header */
+    border-radius: 0px;  /* Remove rounded corners */
 }
 
 /* TOP MENU BAR */
 .top-menu {
     background-color: #1f77b4;  /* Different from header */
     padding: 15px;
-    border-radius: 10px;
     text-align: center;
     margin-top: 0px;   /* No space above */
     margin-bottom: 20px;
+    border-radius: 0px;  /* Remove rounded corners */
 }
 
 .top-menu button {
     background-color: #ffffff;  /* Button white */
     color: #1f77b4;            /* Text color matches menu */
     border: none;
-    border-radius: 8px;
+    border-radius: 8px;        /* Buttons still slightly rounded */
     padding: 12px 30px;
     font-size: 16px;
     font-weight: bold;
@@ -63,7 +63,7 @@ st.markdown("""
 
 /* MAP SPACE */
 .element-container iframe {
-    border-radius: 10px;
+    border-radius: 10px;  /* Keep map slightly rounded */
 }
 </style>
 """, unsafe_allow_html=True)
