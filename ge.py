@@ -21,7 +21,7 @@ st.markdown(
     .header {
         background-color: #0a2342;
         color: white;
-        padding: 20px;
+        padding: 25px;
         border-radius: 10px;
         text-align: center;
         font-family: 'Arial', sans-serif;
@@ -33,7 +33,7 @@ st.markdown(
         background-color: #1f77b4;
         color: white;
         border-radius: 8px;
-        padding: 10px 20px;
+        padding: 10px 25px;
         font-size: 16px;
         font-weight: bold;
     }
@@ -72,24 +72,20 @@ with col3:
 st.markdown("</div>", unsafe_allow_html=True)
 
 # ===============================
-# LEFT SIDEBAR FILTERS
+# SIDEBAR FILTERS
 # ===============================
 st.sidebar.header("Filters")
 region = st.sidebar.selectbox("Select Region", ["Region A", "Region B", "Region C"])
 dataset = st.sidebar.selectbox("Select Dataset", ["Dataset 1", "Dataset 2", "Dataset 3"])
 start_date = st.sidebar.date_input("Start Date", value=date(2025,1,1))
 end_date = st.sidebar.date_input("End Date", value=date(2025,12,31))
+apply_filter = st.sidebar.button("Apply Filter")
 
 # ===============================
 # MAIN LAYOUT
 # ===============================
-# Make center bigger for map: [1,4,1] ratio
-left_col, center_col, right_col = st.columns([1,4,1], gap="large")
-
-# LEFT: Info / Preview
-with left_col:
-    st.write("### Info / Preview")
-    st.image("https://via.placeholder.com/200x150", caption="Preview", use_column_width=True)
+# Map in center, right panel for additional maps
+center_col, right_col = st.columns([4,1], gap="large")
 
 # CENTER: Map / Satellite imagery
 with center_col:
