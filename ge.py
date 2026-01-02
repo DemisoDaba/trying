@@ -2,8 +2,8 @@ import streamlit as st
 import leafmap.foliumap as leafmap
 from datetime import date
 import rasterio
-from rasterio.plot import reshape_as_raster, reshape_as_image
 import numpy as np
+import os
 
 # ===============================
 # PAGE CONFIG
@@ -100,16 +100,35 @@ with center_col:
     m = leafmap.Map(center=[9.25, 38.75], zoom=6)
     m.add_basemap("HYBRID")
 
-    if apply_filter and uploaded_file is not None:
+    # Use uploaded file if available, else default to sbc.tiff in same folder
+    raster_path = None
+    if uploaded_file is not None:
+        raster_path = uploaded_file
+    else:
+        default_file = "sbc.tiff"
+        if os.path.exists(default_file):
+            raster_path = default_file
+
+    if apply_filter and raster_path is not None:
         # Read raster
-        with rasterio.open(uploaded_file) as src:
+        with rasterio.open(raster_path) as src:
             array = src.read(1)
             bounds = src.bounds
             transform = src.transform
 
         # Add raster to map
-        m.add_raster(array, bounds=[[bounds.bottom, bounds.left], [bounds.top, bounds.right]], colormap="viridis", layer_name="SBC Raster")
+        m.add_raster(
+            array,
+            bounds=[[bounds.bottom, bounds.left], [bounds.top, bounds.right]],
+            colormap="viridis",
+            layer_name="SBC Raster"
+        )
+
+        # Zoom to raster
         m.set_center((bounds.left + bounds.right)/2, (bounds.bottom + bounds.top)/2, 10)
+
+    elif apply_filter and raster_path is None:
+        st.warning("No raster file found. Please upload a SBC TIFF file.")
 
     m.to_streamlit(height=650)
 
