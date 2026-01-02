@@ -100,7 +100,7 @@ with left_col:
 
 # CENTER: Map
 with center_col:
-    st.write("### Map / Imagery Viewer")
+    st.write("### Map | Imagery Viewer")
     m = leafmap.Map(center=[0,0], zoom=2)
     m.add_basemap("HYBRID")
     m.to_streamlit(height=650)
