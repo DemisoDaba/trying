@@ -2,6 +2,7 @@ import streamlit as st
 import leafmap.foliumap as leafmap
 from datetime import date
 import os
+import tempfile
 
 # ===============================
 # PAGE CONFIG
@@ -101,18 +102,31 @@ with center_col:
     # Determine raster path
     raster_path = None
     if uploaded_file is not None:
-        raster_path = uploaded_file
+        # Save uploaded file to a temporary file
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.tif') as tmp_file:
+            tmp_file.write(uploaded_file.read())
+            raster_path = tmp_file.name
     else:
         default_file = "sbc.tiff"
         if os.path.exists(default_file):
             raster_path = default_file
 
     if apply_filter and raster_path is not None:
-        # Add raster directly from file using leafmap
-        m.add_rasterio(raster_path, layer_name="SBC Raster")
-
-        # Leafmap will auto-zoom to the raster
-        m.zoom_to_layer("SBC Raster")
+        try:
+            # Add raster from file path
+            m.add_rasterio(raster_path, layer_name="SBC Raster")
+            
+            # Leafmap will auto-zoom to the raster
+            m.zoom_to_layer("SBC Raster")
+            
+            # Clean up temporary file if it was created
+            if uploaded_file is not None and os.path.exists(raster_path):
+                os.unlink(raster_path)
+                
+        except Exception as e:
+            st.error(f"Error loading raster file: {str(e)}")
+            if uploaded_file is not None and os.path.exists(raster_path):
+                os.unlink(raster_path)
 
     elif apply_filter and raster_path is None:
         st.warning("No raster file found. Please upload a SBC TIFF file.")
