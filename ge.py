@@ -8,7 +8,7 @@ from datetime import date
 st.set_page_config(
     page_title="Geospatial Analysis",
     layout="wide",
-    initial_sidebar_state="collapsed",  # hide sidebar
+    initial_sidebar_state="collapsed",
 )
 
 # ===============================
@@ -18,27 +18,28 @@ st.markdown("""
 <style>
 /* HEADER */
 .header {
-    background-color: #0a2342;
+    background-color: #0a2342;  /* Dark blue */
     color: white;
     padding: 25px;
     border-radius: 10px;
     text-align: center;
     font-family: 'Arial', sans-serif;
-    margin-bottom: 10px;
+    margin-bottom: 0px;  /* No space below header */
 }
 
 /* TOP MENU BAR */
 .top-menu {
-    background-color: #0a2342;
+    background-color: #1f77b4;  /* Different from header */
     padding: 15px;
     border-radius: 10px;
     text-align: center;
+    margin-top: 0px;   /* No space above */
     margin-bottom: 20px;
 }
 
 .top-menu button {
-    background-color: #1f77b4;
-    color: white;
+    background-color: #ffffff;  /* Button white */
+    color: #1f77b4;            /* Text color matches menu */
     border: none;
     border-radius: 8px;
     padding: 12px 30px;
@@ -49,7 +50,7 @@ st.markdown("""
 }
 
 .top-menu button:hover {
-    background-color: #3a9ad9;
+    background-color: #d0e4f7;  /* Light hover */
 }
 
 /* MINIMIZE COLUMN GAP */
@@ -86,10 +87,9 @@ st.markdown("""
 # ===============================
 # MAIN LAYOUT
 # ===============================
-# Left column = filters, center = map, right = additional maps
 left_col, center_col, right_col = st.columns([1,4,1], gap="small")
 
-# LEFT: Filters inside page now
+# LEFT: Filters
 with left_col:
     st.write("### Filters")
     region = st.selectbox("Select Region", ["Region A", "Region B", "Region C"])
