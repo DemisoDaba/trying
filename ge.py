@@ -1,6 +1,5 @@
 import streamlit as st
 import leafmap.foliumap as leafmap
-from datetime import date
 import os
 import tempfile
 
@@ -113,8 +112,17 @@ with center_col:
 
     if apply_filter and raster_path is not None:
         try:
-            # Add raster from file path
-            m.add_rasterio(raster_path, layer_name="SBC Raster")
+            # Try different methods to add raster based on leafmap version
+            # Method 1: Try add_local_tile (works for most raster formats)
+            m.add_local_tile(raster_path, layer_name="SBC Raster")
+            
+            # Method 2: Alternative - add raster using folium raster overlay
+            # import rasterio
+            # from rasterio.plot import show
+            # with rasterio.open(raster_path) as src:
+            #     bounds = [[src.bounds.bottom, src.bounds.left], 
+            #              [src.bounds.top, src.bounds.right]]
+            #     m.add_raster(raster_path, layer_name="SBC Raster")
             
             # Leafmap will auto-zoom to the raster
             m.zoom_to_layer("SBC Raster")
@@ -125,8 +133,45 @@ with center_col:
                 
         except Exception as e:
             st.error(f"Error loading raster file: {str(e)}")
-            if uploaded_file is not None and os.path.exists(raster_path):
-                os.unlink(raster_path)
+            # Try to show available methods for debugging
+            st.info("Trying alternative raster loading method...")
+            
+            # Alternative approach using direct folium
+            try:
+                import folium
+                from folium.raster_layers import ImageOverlay
+                import numpy as np
+                from PIL import Image
+                
+                # Read and display raster as image (simple approach)
+                img = Image.open(raster_path)
+                img_array = np.array(img)
+                
+                # You'll need to know the bounds of your raster
+                # This is a placeholder - you need actual coordinates
+                bounds = [[9, 38], [9.5, 39]]  # Replace with actual bounds
+                
+                # Add as image overlay
+                img_overlay = ImageOverlay(
+                    img_array,
+                    bounds=bounds,
+                    name="SBC Raster",
+                    opacity=0.7,
+                    interactive=True,
+                    cross_origin=False,
+                    zindex=1,
+                )
+                img_overlay.add_to(m)
+                
+                m.fit_bounds(bounds)
+                
+            except Exception as e2:
+                st.error(f"Alternative method also failed: {str(e2)}")
+            
+            finally:
+                # Clean up temporary file
+                if uploaded_file is not None and os.path.exists(raster_path):
+                    os.unlink(raster_path)
 
     elif apply_filter and raster_path is None:
         st.warning("No raster file found. Please upload a SBC TIFF file.")
