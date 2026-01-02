@@ -109,20 +109,12 @@ with center_col:
             raster_path = default_file
 
     if apply_filter and raster_path is not None:
-        # Read raster with rasterio
+        # Add raster directly using add_rasterio()
+        m.add_rasterio(raster_path, layer_name="SBC Raster")
+
+        # Zoom to raster using bounds
         with rasterio.open(raster_path) as src:
-            array = src.read(1)
             bounds = src.bounds
-
-        # Add raster using add_raster (works in all versions)
-        m.add_raster(
-            array,
-            bounds=[[bounds.bottom, bounds.left], [bounds.top, bounds.right]],
-            colormap="viridis",
-            layer_name="SBC Raster"
-        )
-
-        # Zoom to raster
         m.set_center((bounds.left + bounds.right)/2, (bounds.bottom + bounds.top)/2, 10)
 
     elif apply_filter and raster_path is None:
